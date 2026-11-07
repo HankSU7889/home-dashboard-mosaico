@@ -1,0 +1,3 @@
+## 数据层用到的外部依赖
+dependencies:
+  espressif/cjson: "^1.7.18"

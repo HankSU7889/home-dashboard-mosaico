@@ -50,4 +50,4 @@ Thumbs.db
 # Keep sdkconfig*.defaults, idf_component.yml and source assets versioned.
 
 # 编译时自动生成的中文子集字体
-components/app_hello/ui/fonts/NotoSansSC-DashSubset.ttf
+components/app_dash/ui/fonts/NotoSansSC-DashSubset.ttf

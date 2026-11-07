@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(hello_backend LANGUAGES C)
+project(dash_backend LANGUAGES C)
 
 if(NOT ESP_GSP_COMPONENT_DIR AND DEFINED ENV{ESP_GSP_COMPONENT_DIR})
     set(ESP_GSP_COMPONENT_DIR "$ENV{ESP_GSP_COMPONENT_DIR}")
@@ -20,7 +20,9 @@ if(NOT EXISTS "${ESP_GSP_COMPONENT_DIR}/tools/sim_bridge/CMakeLists.txt")
 endif()
 
 add_subdirectory("${ESP_GSP_COMPONENT_DIR}/tools/sim_bridge" sim_bridge)
-gsp_add_backend(hello_backend
-    SOURCES ../app_hello.c platform_pc.c
-    INCLUDE_DIRECTORIES ../include
+# 数据层的头文件(dash_data.h / dash_cfg.h / dash_types.h)刻意不依赖 ESP-IDF,
+# 这样界面这一层可以原样编到 PC 上跑; 真数据层由 dash_data_stub.c 顶替。
+gsp_add_backend(dash_backend
+    SOURCES ../app_dash.c platform_pc.c dash_data_stub.c
+    INCLUDE_DIRECTORIES ../include ../../dash_data/include
     SCENES ../ui/main.json)

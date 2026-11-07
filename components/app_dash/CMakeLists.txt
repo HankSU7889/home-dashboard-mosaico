@@ -1,6 +1,6 @@
-idf_component_register(SRCS "app_hello.c"
+idf_component_register(SRCS "app_dash.c"
     INCLUDE_DIRS "include"
-    REQUIRES esp-gsp)
+    REQUIRES esp-gsp dash_data)
 include("${MOSAICO_UTILS_ROOT}/mosaico-tools/cmake/gsp_bundle.cmake")
 
 # ---------------------------------------------------------------------------

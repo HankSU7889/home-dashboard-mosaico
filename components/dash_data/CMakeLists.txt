@@ -1,0 +1,25 @@
+idf_component_register(SRCS
+    "src/dash_cache.c"
+    "src/dash_cfg.c"
+    "src/dash_data.c"
+    "src/dash_gbk.c"
+    "src/dash_ha.c"
+    "src/dash_http.c"
+    "src/dash_lock.c"
+    "src/dash_stock.c"
+    "src/dash_sysstat.c"
+    "src/dash_weather.c"
+    INCLUDE_DIRS "include"
+    REQUIRES
+        esp_common
+        esp_event
+        esp_http_client
+        esp_netif
+        esp_rom
+        esp_timer
+        esp_wifi
+        freertos
+        cjson
+        mbedtls
+        nvs_flash
+        esp_mosaico_app_recovery)
