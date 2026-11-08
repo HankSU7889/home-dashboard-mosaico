@@ -74,6 +74,55 @@ GET {server_base}/device/config?device_id=<设备身份>
 
 ---
 
+## 1.5 服务端怎么决定下发什么
+
+同一个接口服务两类请求，**靠 `device_id` 参数区分**：
+
+| 请求 | 返回 |
+|---|---|
+| `GET /device/config?device_id=xxx` | 上面那份运行时配置（新固件用） |
+| `GET /device/config`（不带参数） | 网页看板自己用的布局配置（老接口，不受影响） |
+
+服务器侧（`dashd.py`）的下发规则：
+
+| 内容 | 来源 |
+|---|---|
+| `ha_url` / `ha_token` | 服务器的 `secrets/ha.json` |
+| `qweather_key` | 服务器的 `secrets/qweather.json` |
+| `qweather_host` | 缺省 `api.qweather.com`（该凭据绑定的 Host） |
+| `qweather_location` | 服务器 `config.json` 的 `device.location_id` |
+| `stock_codes` / `stock_names` | 服务器 `config.json` 的 `quotes.symbols` |
+| `devices` | 服务器 `config.json` 的 `touch.items`（最多取前 5 条） |
+
+`domain` 由服务器判断：实体 ID 以 `fan.` 开头或控件类型是 `fan` → `fan`，其余 → `light`。
+
+### 多块板子：按 device_id 分发
+
+服务器 `config.json` 里可以加 `device_profiles`，键就是板子上的 `device_id`：
+
+```json
+{
+  "device_profiles": {
+    "livingroom": {
+      "title": "客厅",
+      "devices": [
+        { "name": "客厅灯带", "entity_id": "light.unknown" },
+        { "name": "卧室风扇", "entity_id": "fan.dmaker_cn_657655659_p5c_s_2_fan" }
+      ]
+    },
+    "bedroom": {
+      "title": "卧室"
+    }
+  }
+}
+```
+
+- `devices` 一旦给了就整个替换默认清单；不给就用服务器默认那组
+- `title` 不给就显示「家庭看板」
+- 没匹配到 profile 的板子走默认值，不影响别的板子
+
+---
+
 ## 2. 服务器系统状态
 
 看板服务器自己也要暴露一个状态接口(从 7C 那边沿用)：
